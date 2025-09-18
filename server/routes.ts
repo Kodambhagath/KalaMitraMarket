@@ -8,11 +8,11 @@ import multer from "multer";
 
 // Initialize Stripe
 const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: "2024-12-18.acacia",
+  apiVersion: "2025-08-27.basil",
 }) : null;
 
 // Initialize Gemini AI
-const genAI = process.env.GEMINI_API_KEY ? new GoogleGenAI(process.env.GEMINI_API_KEY) : null;
+const genAI = process.env.GEMINI_API_KEY ? new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY }) : null;
 
 // Configure multer for file uploads
 const upload = multer({ 
@@ -223,11 +223,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Generate ad script
-      const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
       const scriptPrompt = `Create a compelling marketing tagline and description for this product: ${prompt}. Return JSON with 'tagline' and 'description' fields.`;
       
-      const scriptResult = await model.generateContent(scriptPrompt);
-      const scriptText = scriptResult.response.text();
+      const scriptResult = await genAI.models.generateContent({
+        model: "gemini-2.5-flash",
+        contents: scriptPrompt,
+      });
+      const scriptText = scriptResult.text;
       
       let scriptContent;
       try {
@@ -240,14 +242,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Generate marketing images
-      const imageModel = genAI.getGenerativeModel({ model: "gemini-2.0-flash-preview-image-generation" });
       const imagePrompt = `Create a professional marketing image for: ${prompt}. Style: clean, modern, product-focused with warm lighting.`;
       
       let generatedImages = [];
       try {
-        const imageResult = await imageModel.generateContent({
+        const imageResult = await genAI.models.generateContent({
+          model: "gemini-2.0-flash-preview-image-generation",
           contents: [{ role: "user", parts: [{ text: imagePrompt }] }],
-          generationConfig: {
+          config: {
             responseModalities: ["TEXT", "IMAGE"],
           }
         });
