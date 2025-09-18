@@ -8,7 +8,7 @@ import multer from "multer";
 
 // Initialize Stripe
 const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: "2025-08-27.basil",
+  apiVersion: "2024-12-18",
 }) : null;
 
 // Initialize Gemini AI
@@ -227,9 +227,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const scriptResult = await genAI.models.generateContent({
         model: "gemini-2.5-flash",
-        contents: scriptPrompt,
+        contents: [{ role: "user", parts: [{ text: scriptPrompt }] }],
       });
-      const scriptText = scriptResult.text;
+      const scriptText = scriptResult.response.text();
       
       let scriptContent;
       try {

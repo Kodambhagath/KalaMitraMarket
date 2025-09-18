@@ -28,9 +28,9 @@ export const generateAdContent = async (productDescription: string) => {
 
     const result = await genAI.models.generateContent({
       model: "gemini-2.5-flash",
-      contents: prompt,
+      contents: [{ role: "user", parts: [{ text: prompt }] }],
     });
-    const response = result.text;
+    const response = result.response.text();
     
     try {
       const parsed = JSON.parse(response);
@@ -82,9 +82,9 @@ export const generateImprovementTips = async (productData: { name: string; categ
 
     const result = await genAI.models.generateContent({
       model: "gemini-2.5-flash",
-      contents: prompt,
+      contents: [{ role: "user", parts: [{ text: prompt }] }],
     });
-    const response = result.text;
+    const response = result.response.text();
     
     // Parse the response into individual tips
     const tips = response.split('\n').filter((tip: string) => tip.trim().length > 10).slice(0, 3);
