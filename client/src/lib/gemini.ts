@@ -1,7 +1,7 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 
 const genAI = import.meta.env.VITE_GEMINI_API_KEY 
-  ? new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY)
+  ? new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY })
   : null;
 
 export const generateAdContent = async (productDescription: string) => {
@@ -18,8 +18,6 @@ export const generateAdContent = async (productDescription: string) => {
   }
 
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
-    
     const prompt = `Create compelling marketing content for this handcrafted product: ${productDescription}
     
     Please return a JSON object with:
@@ -28,8 +26,11 @@ export const generateAdContent = async (productDescription: string) => {
     
     Focus on the craftsmanship, uniqueness, and emotional appeal of handmade products.`;
 
-    const result = await model.generateContent(prompt);
-    const response = result.response.text();
+    const result = await genAI.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: prompt,
+    });
+    const response = result.text;
     
     try {
       const parsed = JSON.parse(response);
@@ -61,7 +62,7 @@ export const generateAdContent = async (productDescription: string) => {
   }
 };
 
-export const generateImprovementTips = async (productData: any) => {
+export const generateImprovementTips = async (productData: { name: string; category: string; price: string; views: number; rating: string }) => {
   if (!genAI) {
     return [
       "Add more close-up shots of your product details to increase engagement by 23%",
@@ -70,8 +71,6 @@ export const generateImprovementTips = async (productData: any) => {
   }
 
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
-    
     const prompt = `Analyze this product data and provide 2-3 specific improvement tips:
     Product: ${productData.name}
     Category: ${productData.category}
@@ -81,11 +80,14 @@ export const generateImprovementTips = async (productData: any) => {
     
     Provide actionable tips for improving sales, visibility, or product appeal. Be specific and include percentages where relevant.`;
 
-    const result = await model.generateContent(prompt);
-    const response = result.response.text();
+    const result = await genAI.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: prompt,
+    });
+    const response = result.text;
     
     // Parse the response into individual tips
-    const tips = response.split('\n').filter(tip => tip.trim().length > 10).slice(0, 3);
+    const tips = response.split('\n').filter((tip: string) => tip.trim().length > 10).slice(0, 3);
     
     return tips.length > 0 ? tips : [
       "Add more detailed product descriptions to improve customer confidence",
