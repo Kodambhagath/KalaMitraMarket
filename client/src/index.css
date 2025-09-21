@@ -1,114 +1,134 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
+/*
+  The following Tailwind directives require processing by Tailwind CSS.
+  Make sure your build tool (like PostCSS with Tailwind plugin) is set up correctly.
+*/
+/* If you are not using Tailwind CSS, comment out or remove these lines */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Optional: custom styles below */
+body * {
+  color: #000000 !important;
+}
+
+/* Force a white background on the entire page */
+body {
+  background: #fff !important;
+}
+
+/* Reset any specific dark-mode or color-related classes */
+.dark, [data-theme="dark"] {
+  background-color: #ffffff !important;
+  color: #ffffff !important;
+}
+
+/* Buttons, inputs, links */
+button, a, input, textarea, select {
+  color: #000000 !important;
+  background-color: #ffffff !important;
+  border-color: #e5e7eb !important;
+}
+
+/* Prevent dark class from flipping colors */
+.dark, .dark * {
+  background-color: transparent !important;
+  color: #000000 !important;
+}
+
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Dark/Light theme toggle using prefers-color-scheme */
 :root {
-  --background: hsl(33, 100%, 97%);
-  --foreground: hsl(20, 14.3%, 4.1%);
-  --card: hsl(0, 0%, 100%);
-  --card-foreground: hsl(20, 14.3%, 4.1%);
-  --popover: hsl(0, 0%, 100%);
-  --popover-foreground: hsl(20, 14.3%, 4.1%);
-  --primary: hsl(24, 96%, 53%);
-  --primary-foreground: hsl(0, 0%, 100%);
-  --secondary: hsl(177, 70%, 41%);
-  --secondary-foreground: hsl(0, 0%, 100%);
-  --muted: hsl(60, 5%, 96%);
-  --muted-foreground: hsl(25, 5%, 45%);
-  --accent: hsl(27, 96%, 61%);
-  --accent-foreground: hsl(0, 0%, 100%);
-  --destructive: hsl(0, 84%, 60%);
-  --destructive-foreground: hsl(0, 0%, 100%);
-  --border: hsl(20, 6%, 90%);
-  --input: hsl(20, 6%, 90%);
-  --ring: hsl(24, 96%, 53%);
-  --chart-1: hsl(24, 96%, 53%);
-  --chart-2: hsl(177, 70%, 41%);
-  --chart-3: hsl(27, 96%, 61%);
-  --chart-4: hsl(147.1429, 78.5047%, 41.9608%);
-  --chart-5: hsl(341.4894, 75.2000%, 50.9804%);
-  --sidebar: hsl(0, 0%, 100%);
-  --sidebar-foreground: hsl(20, 14.3%, 4.1%);
-  --sidebar-primary: hsl(24, 96%, 53%);
-  --sidebar-primary-foreground: hsl(0, 0%, 100%);
-  --sidebar-accent: hsl(27, 96%, 61%);
-  --sidebar-accent-foreground: hsl(0, 0%, 100%);
-  --sidebar-border: hsl(20, 6%, 90%);
-  --sidebar-ring: hsl(24, 96%, 53%);
-  --radius: 8px;
+  --bg-light: #f9f9f9;
+  --text-light: #222;
+
+  --bg-dark: #121212;
+  --text-dark: #f5f5f5;
+
+  --primary: #ff6f61;
+  --secondary: #3a86ff;
+  --accent: #ffbe0b;
 }
 
-.dark {
-  --background: hsl(20, 14.3%, 4.1%);
-  --foreground: hsl(33, 100%, 97%);
-  --card: hsl(20, 14.3%, 10%);
-  --card-foreground: hsl(33, 100%, 97%);
-  --popover: hsl(20, 14.3%, 10%);
-  --popover-foreground: hsl(33, 100%, 97%);
-  --primary: hsl(24, 96%, 53%);
-  --primary-foreground: hsl(0, 0%, 100%);
-  --secondary: hsl(177, 70%, 41%);
-  --secondary-foreground: hsl(0, 0%, 100%);
-  --muted: hsl(0, 0%, 15%);
-  --muted-foreground: hsl(25, 5%, 60%);
-  --accent: hsl(27, 96%, 61%);
-  --accent-foreground: hsl(0, 0%, 100%);
-  --destructive: hsl(0, 62%, 50%);
-  --destructive-foreground: hsl(0, 0%, 100%);
-  --border: hsl(0, 0%, 15%);
-  --input: hsl(0, 0%, 15%);
-  --ring: hsl(24, 96%, 53%);
-  --sidebar: hsl(20, 14.3%, 10%);
-  --sidebar-foreground: hsl(33, 100%, 97%);
-  --sidebar-primary: hsl(24, 96%, 53%);
-  --sidebar-primary-foreground: hsl(0, 0%, 100%);
-  --sidebar-accent: hsl(27, 96%, 61%);
-  --sidebar-accent-foreground: hsl(0, 0%, 100%);
-  --sidebar-border: hsl(0, 0%, 15%);
-  --sidebar-ring: hsl(24, 96%, 53%);
+/* Default Light */
+body {
+  font-family: "Inter", sans-serif;
+  background: var(--bg-light);
+  color: var(--text-light);
+  min-height: 100vh;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
   body {
-    @apply font-sans antialiased bg-background text-foreground;
+    background: var(--bg-dark);
+    color: var(--text-dark);
   }
 }
 
-@layer utilities {
-  .glass-effect {
-    backdrop-filter: blur(8px);
-    background: rgba(255, 255, 255, 0.8);
-  }
-  
-  .dark .glass-effect {
-    background: rgba(0, 0, 0, 0.8);
-  }
-  
-  .hero-gradient {
-    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 100%);
-  }
+/* Search Box */
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 500px;
+  background: white;
+  border-radius: 50px;
+  padding: 12px 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  transition: background 0.3s ease, color 0.3s ease;
+}
 
-  .voice-pulse {
-    animation: pulse 2s infinite;
-  }
-
-  .line-clamp-1 {
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
-  }
-
-  .line-clamp-2 {
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
+@media (prefers-color-scheme: dark) {
+  .search-box {
+    background: #1e1e1e;
+    box-shadow: 0 4px 12px rgba(255,255,255,0.1);
   }
 }
+
+/* Input */
+.search-box input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 16px;
+  color: inherit;
+}
+
+/* Placeholder color */
+.search-box input::placeholder {
+  color: #000000;
+}
+
+/* Icon button */
+.search-icon {
+  font-size: 18px;
+  cursor: pointer;
+  color: var(--secondary);
+  transition: transform 0.2s ease;
+}
+
+.search-icon:hover {
+  transform: scale(1.2);
+  color: var(--primary);
+}
+@media (prefers-color-scheme: dark) {
+  .search-icon {
+    color: var(--accent);
+  }
+}
+.search-icon:hover {
+  color: var(--primary);
+}
+
+/* This is a valid CSS comment */
+
+
